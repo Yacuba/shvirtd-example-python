@@ -1,0 +1,37 @@
+include:
+  - proxy.yaml
+
+services:
+  db:
+    image: mysql:8
+    container_name: db
+    restart: always
+    env_file:
+      - .env
+    networks:
+      backend:
+        ipv4_address: 172.20.0.10
+
+  web:
+    image: cr.yandex/crpvhk8tgssq2h3392rm/test-python-app:v1
+    container_name: web
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_USER: app
+      DB_PASSWORD: QwErTy1234
+      DB_NAME: virtd
+    depends_on:
+      - db
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
