@@ -6,6 +6,7 @@ services:
     image: mysql:8
     container_name: db
     restart: always
+    command: --mysql-native-password=ON
     env_file:
       - .env
     networks:
